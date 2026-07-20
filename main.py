@@ -1,4 +1,6 @@
 from flask import Flask, jsonify
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 import hashlib
 import hmac
 import secrets
@@ -9,6 +11,13 @@ app = Flask(__name__)
 # แสดง JSON ตามลำดับที่เขียนไว้ใน Dictionary
 app.json.sort_keys = False
 
+limiter = Limiter(
+   key_func=get_remote_address,
+    app=app,
+       default_limites=[],
+    storage_url="memory://",
+    headers_enabled=True
+)
 WORK_FACTOR = 2_000_000 ##---------##
 PASSWORD_LENGTH = 10
 SALT_SIZE_BYTES = 16
